@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Todo App — Design Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #EDE8DF;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px 80px;
+    }
+
+    .phone-frame {
+      background: #F5F0E8;
+      border-radius: 36px;
+      width: 390px;
+      min-height: 780px;
+      box-shadow: 0 32px 80px rgba(44,36,22,0.18), 0 2px 8px rgba(44,36,22,0.08);
+      overflow: hidden;
+      position: relative;
+      padding: 0 0 100px;
+    }
+
+    .app-shell {
+      max-width: 100%;
+      padding: 48px 24px 32px;
+      position: relative;
+    }
+
+    .header { margin-bottom: 28px; }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .header-date {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #A0937A;
+    }
+    .header-streak {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: #C4865A;
+      text-transform: uppercase;
+    }
+    .streak-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #C4865A;
+      display: inline-block;
+    }
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: #2C2416;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .header-subtitle {
+      font-size: 13px;
+      color: #A0937A;
+      margin-top: 4px;
+      font-weight: 300;
+    }
+
+    .progress-wrap { margin: 20px 0 24px; }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #A0937A;
+      margin-bottom: 7px;
+    }
+    .progress-track {
+      height: 4px;
+      background: #E2D9C8;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 43%;
+      background: linear-gradient(90deg, #C4865A, #D4A574);
+      border-radius: 99px;
+    }
+
+    .tabs { display: flex; gap: 6px; margin-bottom: 20px; }
+    .tab {
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .tab.active { background: #2C2416; color: #F5F0E8; border-color: #2C2416; }
+    .tab.inactive { background: transparent; color: #A0937A; border-color: #D4C8B2; }
+
+    .input-card {
+      background: #FDF9F3;
+      border: 1.5px solid #E2D9C8;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(44,36,22,0.06);
+    }
+    .input-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: #F5F0E8;
+      border: 1.5px dashed #C4B99A;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: #C4B99A;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .input-field {
+      flex: 1;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: #2C2416;
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+    .input-field::placeholder { color: #C4B99A; }
+    .input-add-btn {
+      width: 28px; height: 28px;
+      background: #C4865A;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-size: 18px;
+      color: #FDF9F3;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .category-row { display: flex; gap: 7px; margin-bottom: 18px; flex-wrap: wrap; }
+    .cat-pill {
+      padding: 4px 11px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border: 1.5px solid;
+    }
+    .cat-work  { background: #EDF3FF; color: #4A6FA5; border-color: #C0CDE0; }
+    .cat-life  { background: #EDFAF2; color: #3A7D56; border-color: #B6DECA; }
+    .cat-self  { background: #FFF5ED; color: #C4865A; border-color: #E5C9AE; }
+    .cat-all   { background: #2C2416; color: #F5F0E8; border-color: #2C2416; }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #B0A48A;
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    .todo-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+    .todo-item {
+      background: #FDF9F3;
+      border: 1.5px solid #E2D9C8;
+      border-radius: 14px;
+      padding: 13px 15px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 1px 6px rgba(44,36,22,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    .todo-item.pinned { border-color: #C4B99A; background: #FBF6EE; }
+    .todo-item.pinned::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: #C4865A;
+      border-radius: 3px 0 0 3px;
+    }
+    .todo-item.done { opacity: 0.55; background: #F5F0E8; border-color: #DDD5C4; }
+
+    .check-box {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      border: 1.5px solid #C4B99A;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+    .check-box.checked { background: #C4865A; border-color: #C4865A; }
+    .check-icon { color: #FDF9F3; font-size: 11px; }
+
+    .todo-content { flex: 1; min-width: 0; }
+    .todo-text {
+      font-size: 14px;
+      font-weight: 400;
+      color: #2C2416;
+      line-height: 1.4;
+      margin-bottom: 5px;
+    }
+    .todo-text.done-text { text-decoration: line-through; color: #A0937A; }
+
+    .todo-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .meta-tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+    .tag-work { background: #EDF3FF; color: #4A6FA5; }
+    .tag-life { background: #EDFAF2; color: #3A7D56; }
+    .tag-self { background: #FFF5ED; color: #C4865A; }
+
+    .meta-due { font-size: 10px; color: #B0A48A; font-weight: 400; }
+    .meta-due.overdue { color: #C0583A; font-weight: 500; }
+
+    .meta-priority { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .p-high { background: #C0583A; }
+    .p-med  { background: #C4865A; }
+    .p-low  { background: #8DB87E; }
+
+    .todo-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .drag-handle { color: #C4B99A; font-size: 12px; cursor: grab; }
+    .ellipsis { color: #C4B99A; font-size: 14px; cursor: pointer; }
+
+    .collapsed-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #F0EAE0;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .collapsed-count {
+      background: #C4B99A;
+      color: #FDF9F3;
+      font-size: 10px;
+      font-weight: 600;
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .collapsed-label {
+      font-size: 12px;
+      color: #A0937A;
+      flex: 1;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .collapsed-chevron { color: #C4B99A; font-size: 12px; }
+
+    .bottom-nav {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2C2416;
+      border-radius: 99px;
+      padding: 10px 22px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      box-shadow: 0 8px 32px rgba(44,36,22,0.22);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      opacity: 0.45;
+    }
+    .nav-item.active { opacity: 1; }
+    .nav-icon { font-size: 16px; }
+    .nav-label {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #F5F0E8;
+    }
+    .fab {
+      width: 44px; height: 44px;
+      background: #C4865A;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      color: #FDF9F3;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(196,134,90,0.45);
+      font-weight: 300;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="app-shell">
+
+      <div class="header">
+        <div class="header-top">
+          <span class="header-date">Wednesday, 18 Mar</span>
+          <span class="header-streak"><span class="streak-dot"></span>7 day streak</span>
+        </div>
+        <div class="header-title">My Tasks</div>
+        <div class="header-subtitle">7 tasks · 4 remaining today</div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Daily progress</span>
+          <span>3 / 7 done</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active">All</div>
+        <div class="tab inactive">Today</div>
+        <div class="tab inactive">Upcoming</div>
+        <div class="tab inactive">Done</div>
+      </div>
+
+      <div class="input-card">
+        <div class="input-icon">+</div>
+        <input class="input-field" type="text" placeholder="Add a new task…" />
+        <div class="input-add-btn">+</div>
+      </div>
+
+      <div class="category-row">
+        <div class="cat-pill cat-all">All</div>
+        <div class="cat-pill cat-work">Work</div>
+        <div class="cat-pill cat-life">Life</div>
+        <div class="cat-pill cat-self">Self</div>
+      </div>
+
+      <div class="section-label">Active · 4 tasks</div>
+      <div class="todo-list">
+
+        <div class="todo-item pinned">
+          <div class="check-box"></div>
+          <div class="todo-content">
+            <div class="todo-text">Finish the design handoff document</div>
+            <div class="todo-meta">
+              <span class="meta-tag tag-work">Work</span>
+              <span class="meta-due overdue">Overdue · Mar 17</span>
+              <span class="meta-priority p-high"></span>
+            </div>
+          </div>
+          <div class="todo-right">
+            <span class="ellipsis">⋯</span>
+            <span class="drag-handle">⠿</span>
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="check-box"></div>
+          <div class="todo-content">
+            <div class="todo-text">Review PR for authentication service</div>
+            <div class="todo-meta">
+              <span class="meta-tag tag-work">Work</span>
+              <span class="meta-due">Today</span>
+              <span class="meta-priority p-med"></span>
+            </div>
+          </div>
+          <div class="todo-right">
+            <span class="ellipsis">⋯</span>
+            <span class="drag-handle">⠿</span>
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="check-box"></div>
+          <div class="todo-content">
+            <div class="todo-text">Grocery run — veggies & breakfast things</div>
+            <div class="todo-meta">
+              <span class="meta-tag tag-life">Life</span>
+              <span class="meta-due">Today</span>
+              <span class="meta-priority p-low"></span>
+            </div>
+          </div>
+          <div class="todo-right">
+            <span class="ellipsis">⋯</span>
+            <span class="drag-handle">⠿</span>
+          </div>
+        </div>
+
+        <div class="todo-item">
+          <div class="check-box"></div>
+          <div class="todo-content">
+            <div class="todo-text">30 min morning run</div>
+            <div class="todo-meta">
+              <span class="meta-tag tag-self">Self</span>
+              <span class="meta-due">Tomorrow</span>
+              <span class="meta-priority p-low"></span>
+            </div>
+          </div>
+          <div class="todo-right">
+            <span class="ellipsis">⋯</span>
+            <span class="drag-handle">⠿</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="collapsed-bar">
+        <div class="collapsed-count">3</div>
+        <span class="collapsed-label">Completed today</span>
+        <span class="collapsed-chevron">›</span>
+      </div>
+
+      <div class="section-label">Completed · 3 tasks</div>
+      <div class="todo-list">
+        <div class="todo-item done">
+          <div class="check-box checked"><span class="check-icon">✓</span></div>
+          <div class="todo-content">
+            <div class="todo-text done-text">Team standup call</div>
+            <div class="todo-meta">
+              <span class="meta-tag tag-work">Work</span>
+              <span class="meta-due">Done 9:15 am</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="todo-item done">
+          <div class="check-box checked"><span class="check-icon">✓</span></div>
+          <div class="todo-content">
+            <div class="todo-text done-text">Read 20 pages of current book</div>
+            <div class="todo-meta">
+              <span class="meta-tag tag-self">Self</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="todo-item done">
+          <div class="check-box checked"><span class="check-icon">✓</span></div>
+          <div class="todo-content">
+            <div class="todo-text done-text">Pay electricity bill</div>
+            <div class="todo-meta">
+              <span class="meta-tag tag-life">Life</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item active">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">Tasks</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📅</span>
+        <span class="nav-label">Calendar</span>
+      </div>
+      <div class="fab">+</div>
+      <div class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Stats</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Settings</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
