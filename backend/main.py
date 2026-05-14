@@ -19,7 +19,7 @@ app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 @app.get("/")
 def home(request: Request, db: Session = Depends(get_db)):
     tasks_db = crud.get_all_tasks(db)
-    return templates.TemplateResponse("index.html", {
+    return templates.TemplateResponse(request, "index.html", {
         "request": request,
         "message": "My Task List",
         "tasks": tasks_db
