@@ -1,50 +1,45 @@
-from datetime import datetime
+
 from pathlib import Path
 
-from fastapi import FastAPI, Depends, Form, HTTPException, Request
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI, APIRouter
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
-
-from backend import schemas, crud
-from backend.database import get_db
+from backend.routes import router as task_router
+from backend.user_routes import router as user_router
+from backend.templates import templates
 
 app = FastAPI()
 BASE_DIR = Path(__file__).resolve().parent
-templates = Jinja2Templates(directory=BASE_DIR / "templates")
+
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 
+router = APIRouter(prefix="/api/v1")
 
-@app.get("/")
-def home(request: Request, db: Session = Depends(get_db)):
-    tasks_db = crud.get_all_tasks(db)
-    return templates.TemplateResponse(request, "index.html", {
-        "request": request,
-        "message": "My Task List",
-        "tasks": tasks_db
-    })
+# add task routes
+router.include_router(task_router)
+router.include_router(user_router)
 
+app.include_router(router)
 
-@app.post("/add-task")
-def add_task(title: str = Form(...), description: str = Form(...), date: str = Form(...), db: Session = Depends(get_db)):
-    try:
-        task_date = datetime.fromisoformat(date).date()
-    except ValueError:
-        raise HTTPException(status_code=400, detail="date must be in YYYY-MM-DD format")
-    
-    task = schemas.TaskCreate(title=title, description=description, date=task_date)
-    crud.create_task(db, task)
-    return RedirectResponse(url="/", status_code=303)
+# @app.get("/test_html")
+# def home_test(request: Request, db: Session = Depends(get_db)):
+#     tasks_db = crud.get_all_tasks(db)
+#     return templates.TemplateResponse(request, "index2.html", {
+#         "request": request,
+#         "message": "My Task List",
+#         "tasks": tasks_db
+#     })
 
+# @app.get("/test")
+# def test():
+#     return {"message": "Test successful"}
 
-@app.post("/delete-task/{task_id}")
-def delete_task(task_id: int, db: Session = Depends(get_db)):
-    crud.delete_task(db, task_id)
-    return RedirectResponse(url="/", status_code=303)
-
-
-@app.post("/update-task/{task_id}")
-def update_task(task_id: int, status: str = Form(...), db: Session = Depends(get_db)):
-    crud.update_task_status(db, task_id, status)
-    return RedirectResponse(url="/", status_code=303)
+# @app.post("/create-test")
+# def create_test(data: dict=Body(...), db: Session = Depends(get_db)):
+#     test = models.Test(
+#         name = data.get("name"),
+#         status = data.get("status")
+#     )
+#     db.add(test)
+#     db.commit()
+#     db.refresh(test)
+#     return data 

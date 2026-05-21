@@ -1,0 +1,40 @@
+        <section class="panel composer">
+          <h2 class="section-title">Add a New Task</h2>
+          <p class="section-copy">
+            Fill in the details below and your task will appear immediately in
+            the planner section.
+          </p>
+
+          <form action="{{ url_for('add_task') }}" method="post" class="form-grid">
+            <div class="field">
+              <label for="title">Title</label>
+              <input
+                id="title"
+                type="text"
+                name="title"
+                placeholder="Design landing page"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="description">Description</label>
+              <input
+                id="description"
+                type="text"
+                name="description"
+                placeholder="Polish layout, colors, and section spacing"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="date">Date</label>
+              <input id="date" type="date" name="date" required />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit">Add Task</button>
+            </div>
+          </form>
+        </section>

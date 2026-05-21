@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 load_dotenv()
 
 database_url = os.getenv("DATABASE_URL")
@@ -27,5 +31,6 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
+        logger.info("Database session closed successfully")
     finally:
         db.close()
