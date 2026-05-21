@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  {% include "head.html" %}
+  <body>
+    <main class="shell">
+      <section class="panel hero">
+        <span class="eyebrow">User Access</span>
+        <h1>{{ message }}</h1>
+        <div class="hero-note">Set up your workspace profile</div>
+        <p>
+          Register a new account to keep your tasks connected to the right user
+          and ready for your planner flow.
+        </p>
+
+        <div class="stats">
+          <article class="stat">
+            <strong>New</strong>
+            <span>Account setup</span>
+          </article>
+          <article class="stat">
+            <strong>Ready</strong>
+            <span>Task workflow</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="content">
+        <section class="panel composer">
+          <h2 class="section-title">Register User</h2>
+          <p class="section-copy">
+            Fill in the details below to create a user account.
+          </p>
+
+          <form action="" id="register-form" class="form-grid">
+            <div class="field">
+              <label for="username">Username</label>
+              <input
+                id="username"
+                type="text"
+                name="username"
+                placeholder="alex"
+                autocomplete="username"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="alex@example.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="password_hash">Password</label>
+              <input
+                id="password_hash"
+                type="password"
+                name="password_hash"
+                placeholder="Enter a password"
+                autocomplete="new-password"
+                required
+              />
+            </div>
+
+            <p id="register-message" class="section-copy" role="status"></p>
+
+            <div class="form-actions">
+              <button type="submit">Create Account</button>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const form = document.querySelector("#register-form");
+      const message = document.querySelector("#register-message");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        message.textContent = "Creating account...";
+
+        const formData = new FormData(form);
+        const response = await fetch("{{ url_for('register_user') }}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: formData.get("username"),
+            email: formData.get("email"),
+            password_hash: formData.get("password_hash"),
+          }),
+        });
+
+        if (response.ok) {
+          const user = await response.json();
+          form.reset();
+          message.textContent = `Account created for ${user.username}.`;
+          return;
+        }
+
+        const error = await response.json().catch(() => null);
+        message.textContent = error?.detail || "Account could not be created.";
+      });
+    </script>
+  </body>
+</html>

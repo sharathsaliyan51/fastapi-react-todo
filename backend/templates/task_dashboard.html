@@ -1,0 +1,22 @@
+      <section class="panel hero">
+        <span class="eyebrow">Task Board</span>
+        <h1>{{ message }}</h1>
+        <div class="hero-note">
+          A focused workspace for planning and tracking progress
+        </div>
+        <p>
+          Keep today's work visible, organized, and easy to update with a clean
+          planner interface powered by your FastAPI app.
+        </p>
+
+        <div class="stats">
+          <article class="stat">
+            <strong>{{ tasks|length }}</strong>
+            <span>Tasks captured</span>
+          </article>
+          <article class="stat">
+            <strong>{% if tasks %}Active{% else %}Ready{% endif %}</strong>
+            <span>Current workflow</span>
+          </article>
+        </div>
+      </section>

@@ -1,77 +1,34 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ message }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
-  </head>
-  <body>
-    <main class="shell">
-      <section class="panel hero">
-        <span class="eyebrow">Task Board</span>
-        <h1>{{ message }}</h1>
-        <div class="hero-note">
-          A focused workspace for planning and tracking progress
-        </div>
-        <p>
-          Keep today's work visible, organized, and easy to update with a clean
-          planner interface powered by your FastAPI app.
-        </p>
+        <style>
+          .controls-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+          }
 
-        <div class="stats">
-          <article class="stat">
-            <strong>{{ tasks|length }}</strong>
-            <span>Tasks captured</span>
-          </article>
-          <article class="stat">
-            <strong>{% if tasks %}Active{% else %}Ready{% endif %}</strong>
-            <span>Current workflow</span>
-          </article>
-        </div>
-      </section>
+          .filter-select {
+            padding: 10px 12px;
+            border: 1px solid var(--line, rgba(92,67,49,0.14));
+            border-radius: 10px;
+            background: var(--surface-strong, #fffaf2);
+            color: var(--text, #2f241d);
+            font: inherit;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+          }
 
-      <section class="content">
-        <section class="panel composer">
-          <h2 class="section-title">Add a New Task</h2>
-          <p class="section-copy">
-            Fill in the details below and your task will appear immediately in
-            the planner section.
-          </p>
+          .filter-select:focus {
+            outline: none;
+            border-color: rgba(184,92,56,0.45);
+            box-shadow: 0 0 0 6px rgba(184,92,56,0.06);
+          }
 
-          <form action="/add-task" method="post" class="form-grid">
-            <div class="field">
-              <label for="title">Title</label>
-              <input
-                id="title"
-                type="text"
-                name="title"
-                placeholder="Design landing page"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="description">Description</label>
-              <input
-                id="description"
-                type="text"
-                name="description"
-                placeholder="Polish layout, colors, and section spacing"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="date">Date</label>
-              <input id="date" type="date" name="date" required />
-            </div>
-
-            <div class="form-actions">
-              <button type="submit">Add Task</button>
-            </div>
-          </form>
-        </section>
+          .visually-hidden {
+            position: absolute !important;
+            height: 1px; width: 1px;
+            overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+            white-space: nowrap; border: 0; padding: 0; margin: -1px;
+          }
+        </style>
 
         <section class="panel tasks-card">
           <div class="tasks-header">
@@ -82,8 +39,19 @@
                 your list
               </p>
             </div>
-          </div>
-
+          </div>    
+          <form action="{{ url_for('task_filter')}}" method="get">
+            <div class="controls-row" style="margin-bottom:8px;">
+              <label for="filter" class="visually-hidden">Filter tasks</label>
+                <select id="filter" name="search_dropdown" class="filter-select" onchange="this.form.submit()">
+                  <option value="all" {% if current_filter == "all" %}selected{% endif %}>All</option>
+                  <option value="todo" {% if current_filter == "todo" %}selected{% endif %}>Ready For Action</option>
+                  <option value="in_progress" {% if current_filter == "in_progress" %}selected{% endif %}>In progress</option>
+                  <option value="done" {% if current_filter == "done" %}selected{% endif %}>Completed</option>
+                </select>
+              <input type="text" name="search_string" placeholder="Search tasks.." class="search-input" value="{{ search_string|default('') }}">
+            </div>
+          </form>
           {% if tasks %}
           <div class="task-list">
             {% for task in tasks %} {% set task_status = task.status if
@@ -95,7 +63,7 @@
                   <div class="task-actions">
                     <span class="task-date">{{ task.date }}</span>
                     <form
-                      action="/delete-task/{{ task.id }}"
+                      action="{{ url_for('delete_task', task_id=task.id) }}"
                       method="post"
                       class="delete-form"
                     >
@@ -124,7 +92,7 @@
                   >Ready for action</span
                 >
                 <form
-                  action="/update-task/{{ task.id }}"
+                  action="{{ url_for('update_task', task_id=task.id) }}"
                   method="post"
                   class="status-form"
                 >
@@ -136,7 +104,7 @@
                   >In progress</span
                 >
                 <form
-                  action="/update-task/{{ task.id }}"
+                  action="{{ url_for('update_task', task_id=task.id) }}"
                   method="post"
                   class="status-form"
                 >
@@ -146,7 +114,7 @@
                 {% else %}
                 <span class="status-chip status-chip-done">Completed</span>
                 <form
-                  action="/update-task/{{ task.id }}"
+                  action="{{ url_for('update_task', task_id=task.id) }}"
                   method="post"
                   class="status-form"
                 >
@@ -165,7 +133,3 @@
           </div>
           {% endif %}
         </section>
-      </section>
-    </main>
-  </body>
-</html>
